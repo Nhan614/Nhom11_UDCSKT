@@ -9,6 +9,7 @@ import com.example.shareEdu.entity.User;
 import com.example.shareEdu.repository.PostRepository;
 import com.example.shareEdu.repository.TopicRepository;
 import com.example.shareEdu.repository.UserRepository;
+import lombok.With;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -156,6 +160,45 @@ public class PostServiceTest {
         Assertions.assertThat(response.getId()).isEqualTo(post.getId());
         Assertions.assertThat(response.getContent()).isEqualTo("Hieu dep trai");
         Assertions.assertThat(response.getCreatedAt()).isEqualTo(createTime);
+    }
+
+    @Test
+    @WithMockUser(username = "admin",roles={"ADMIN"})
+    public void softDelete_success(){
+        //given
+        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+
+        //WHEN
+        postService.softDeletePost(post);
+
+        //THEN
+        Assertions.assertThat(post.isDeleted()).isTrue();
+    }
+
+    @Test
+    @WithMockUser(username = "hieu", authorities ={"DELETE_OWN_POST"})
+    public void softDelete_ownPost_success(){
+        //GIVEN
+        post.setAuthor(user);
+        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+
+        //WHEN
+        postService.softDeletePost(post);
+
+        //Then
+        Assertions.assertThat(post.isDeleted()).isTrue();
+
+
+    }
+    @Test
+    @WithMockUser(username = "user", authorities = {})
+    public void softDelete_faild_noPermission(){
+        //GIVEN
+        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
+
+        //THEN
+        Assertions.assertThatThrownBy(() -> postService.softDeletePost(post))
+                .isInstanceOf(AuthorizationDeniedException.class);
     }
 
 

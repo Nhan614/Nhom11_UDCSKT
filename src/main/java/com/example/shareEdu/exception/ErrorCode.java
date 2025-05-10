@@ -16,7 +16,8 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     TOPIC_NOT_EXITS(1009, "Topic not exits", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1010, "Invalid token", HttpStatus.UNAUTHORIZED),
-    POST_NOT_FOUND(1011,"Post not found" , HttpStatus.NOT_FOUND ),;
+    POST_NOT_FOUND(1011,"Post not found" , HttpStatus.NOT_FOUND ),
+    ;
     ErrorCode(int code, String msg, HttpStatus httpStatus) {
         this.code = code;
         this.message = msg;

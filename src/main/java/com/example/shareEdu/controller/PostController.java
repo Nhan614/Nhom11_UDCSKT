@@ -1,9 +1,11 @@
 package com.example.shareEdu.controller;
 
 
+import com.example.shareEdu.dto.request.UpdatePostRequest;
 import com.example.shareEdu.dto.response.ApiResponse;
 import com.example.shareEdu.dto.request.PostCreateRequest;
 import com.example.shareEdu.dto.response.PostResponse;
+import com.example.shareEdu.entity.Post;
 import com.example.shareEdu.service.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,14 @@ public class PostController {
 
     @PatchMapping("/delete/{postId}")
     public ApiResponse<Void> deletePost(@PathVariable Long postId){
-        postService.softDeletePost(postId);
+        Post p = postService.getPost(postId);
+        postService.softDeletePost(p);
         return ApiResponse.<Void>builder().result(null).build();
+    }
+
+    @PutMapping
+    public ApiResponse<PostResponse> updatePost(@RequestBody UpdatePostRequest request){
+        return ApiResponse.<PostResponse>builder()
+                .result(postService.updatePost(request)).build();
     }
 }
