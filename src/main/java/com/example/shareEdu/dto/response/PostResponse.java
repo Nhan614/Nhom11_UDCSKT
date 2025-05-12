@@ -1,6 +1,7 @@
 package com.example.shareEdu.dto.response;
 
 import com.example.shareEdu.entity.Topic;
+import com.example.shareEdu.entity.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,5 +18,6 @@ public class PostResponse {
     String content;
     LocalDateTime createdAt;
     Set<TopicResponse> topics;
+    UserResponse author;
 
 }

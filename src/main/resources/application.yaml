@@ -1,21 +1,19 @@
 server:
-  port: ${PORT:8080}
+  port: 8080
   servlet:
     context-path: /share-edu
 
 spring:
   datasource:
-    url: ${DB_URL}
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-
+    url: "jdbc:mysql://localhost:3307/shareEdu"
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+    username: root
+    password: 462004
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-
 jwt:
-  signerKey: ${JWT_KEY}
-  valid-duration: 360000
-  refreshable-duration: 3600000
+  signerKey: "nJ5IePEJ+FXEQCl/LnyQEI2W/VU0cFv+NjsT35m8+e2B/My+7is+DJqmmSutYfIr"
+  valid-duration: 360000 # second
+  refreshable-duration: 3600000 #in second
