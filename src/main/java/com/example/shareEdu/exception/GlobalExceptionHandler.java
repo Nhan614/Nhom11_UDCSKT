@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
         try {
             errorCode = ErrorCode.valueOf(enumKey);
             var contrainViolation = exception.getBindingResult().getAllErrors()
-                    .getFirst().unwrap(ConstraintViolation.class);
+                    .get(0).unwrap(ConstraintViolation.class);
 
             attributes = contrainViolation.getConstraintDescriptor().getAttributes();
 

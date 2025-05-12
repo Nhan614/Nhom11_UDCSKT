@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 
 public class PostShareResponse {
     Long id;
-    Post post;
+    PostResponse post;
     String caption;
 
 }
