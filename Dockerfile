@@ -1,24 +1,21 @@
 # Giai đoạn build
 FROM maven:3-openjdk-17 AS build
-
 WORKDIR /app
-
-# Copy toàn bộ project
 COPY . .
-
-# Build và bỏ qua test, in ra file build trong target
-RUN mvn clean package -DskipTests && ls -la target
+RUN mvn clean package -Dmaven.test.skip=true
 
 # Giai đoạn runtime
 FROM openjdk:17-jdk-slim
-
 WORKDIR /app
 
-# Copy JAR đã build từ target
+# Copy file JAR đã build
 COPY --from=build /app/target/shareEdu-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose port cho ứng dụng Spring Boot
+# Expose port (Railway sẽ gán PORT ngẫu nhiên qua biến môi trường $PORT)
 EXPOSE 8080
 
-# Chạy JAR
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Tùy chỉnh bộ nhớ JVM (Railway có giới hạn RAM)
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
+
+# Khởi chạy ứng dụng Spring Boot
+ENTRYPOINT sh -c 'java $JAVA_OPTS -jar app.jar --server.port=$PORT'
