@@ -6,15 +6,17 @@ server:
 
 spring:
   datasource:
-    url: ${mysql://root:SgVGCyucZqTAyhONErVslYOiIcawiEQj@gondola.proxy.rlwy.net:45224/railway}
-    username: ${root}
-    password: ${SgVGCyucZqTAyhONErVslYOiIcawiEQj}
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://gondola.proxy.rlwy.net:45224/railway
+    username: root
+    password: SgVGCyucZqTAyhONErVslYOiIcawiEQj
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQLDialect
 
 jwt:
   signerKey: "nJ5IePEJ+FXEQCl/LnyQEI2W/VU0cFv+NjsT35m8+e2B/My+7is+DJqmmSutYfIr"
