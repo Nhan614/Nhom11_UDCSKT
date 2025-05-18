@@ -15,7 +15,7 @@ COPY --from=build /app/target/shareEdu-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 # Tùy chỉnh bộ nhớ JVM (Railway có giới hạn RAM)
-ENV JAVA_OPTS="-Xmx256m -Xms128m -XX:MaxMetaspaceSize=64m -XX:+UseSerialGC"
+ENV JAVA_OPTS="-Xmx256m -Xms128m"
 
 # Khởi chạy ứng dụng Spring Boot
 ENTRYPOINT sh -c 'java $JAVA_OPTS -jar app.jar --server.port=$PORT'
