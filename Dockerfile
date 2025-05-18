@@ -1,21 +1,21 @@
 # Giai đoạn build
 FROM maven:3-openjdk-17 AS build
 WORKDIR /app
-
-COPY pom.xml .
-COPY src ./src
-
+COPY . .
 RUN mvn clean package -Dmaven.test.skip=true
 
 # Giai đoạn runtime
-FROM openjdk:17-jre-slim
+FROM openjdk:17-jdk-slim
 WORKDIR /app
 
+# Copy file JAR đã build
 COPY --from=build /app/target/shareEdu-0.0.1-SNAPSHOT.jar app.jar
 
+# Expose port (Railway sẽ gán PORT ngẫu nhiên qua biến môi trường $PORT)
 EXPOSE 8080
 
-# Giảm bộ nhớ JVM để tránh bị kill trên Railway
-ENV JAVA_OPTS="-Xmx256m -Xms128m -XX:MaxMetaspaceSize=64m -XX:+UseSerialGC -XX:+HeapDumpOnOutOfMemoryError"
+# Tùy chỉnh bộ nhớ JVM (Railway có giới hạn RAM)
+ENV JAVA_OPTS="-Xmx256m -Xms128m -XX:MaxMetaspaceSize=64m -XX:+UseSerialGC"
 
-ENTRYPOINT sh -c "java $JAVA_OPTS -jar app.jar --server.port=$PORT"
+# Khởi chạy ứng dụng Spring Boot
+ENTRYPOINT sh -c 'java $JAVA_OPTS -jar app.jar --server.port=$PORT'
