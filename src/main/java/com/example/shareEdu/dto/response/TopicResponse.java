@@ -12,5 +12,6 @@ public class TopicResponse {
     Long id;
     String name;
     String description;
-
+    boolean approved;
+    boolean isDeleted;
 }

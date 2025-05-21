@@ -31,5 +31,4 @@ public class Topic {
     Set<Post> posts;
 
 
-
 }
