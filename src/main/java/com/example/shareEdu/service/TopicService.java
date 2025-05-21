@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +66,12 @@ public class TopicService {
         return topicResponses;
     }
 
+    public List<TopicResponse> getPendingTopics() {
+        List<Topic> pendingTopics = topicRepository.findByApprovedFalseAndDeletedFalse();
+        return pendingTopics.stream()
+                .map(topicMapper::toTopicResponse)
+                .collect(Collectors.toList());
+    }
 
 
 }

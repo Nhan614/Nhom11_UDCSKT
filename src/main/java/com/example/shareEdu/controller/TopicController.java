@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/topics")
 @RequiredArgsConstructor
@@ -15,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class TopicController {
 
     TopicService topicService;
+
+    // Lấy danh sách chưa duyệt
+    @GetMapping("/pending")
+    public List<TopicResponse> getPendingTopics() {
+        return topicService.getPendingTopics(); // Bạn cần triển khai hàm này
+    }
 
     // Duyệt topic
     @PutMapping("/{id}/approve")
