@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/topics")
+@CrossOrigin(origins = "http://localhost:63342")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TopicController {

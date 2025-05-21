@@ -67,7 +67,7 @@ public class TopicService {
     }
 
     public List<TopicResponse> getPendingTopics() {
-        List<Topic> pendingTopics = topicRepository.findByApprovedFalseAndDeletedFalse();
+        List<Topic> pendingTopics = topicRepository.findByApprovedFalseAndIsDeletedFalse();
         return pendingTopics.stream()
                 .map(topicMapper::toTopicResponse)
                 .collect(Collectors.toList());
