@@ -27,7 +27,7 @@ public class PostShareController {
     @PostMapping
     public ApiResponse<PostShareResponse> createPostShare(@RequestBody PostShareCreateRequest request){
         return ApiResponse.<PostShareResponse>builder()
-                .result(postShareService.createPostShare(request))
+                .result(postShareService.createPostShare(request)) //8.1.6. createPostShare(request)
                 .build();
     }
 

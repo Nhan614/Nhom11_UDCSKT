@@ -20,9 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {"/users",
-    "/auth/token","/auth/introspect", "/auth/log-out","/auth/refresh-token"};
+    "/auth/token","/auth/introspect", "/auth/log-out","/auth/refresh-token", "/timeline"};
 
-  //  @Value("${jwt.signerKey}")
+    private final String[] PUBLIC_GET_ENDPOINTS = { "/timeline"};
+
+
+    //  @Value("${jwt.signerKey}")
 
    @Autowired
     private CustumJwtDecoder custumJwtDecoder;
@@ -30,7 +33,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(requests ->
-                        requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll() //APIs are allowed to be accessed without authentication.
+                        requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()//APIs are allowed to be accessed without authentication.
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_ENDPOINTS).permitAll()
                                 .anyRequest()
                                 .authenticated())// other APIs must authencation
                 .addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class); // add log filter

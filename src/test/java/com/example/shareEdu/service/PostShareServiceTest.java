@@ -1,7 +1,10 @@
 package com.example.shareEdu.service;
 
 import com.example.shareEdu.dto.request.PostShareCreateRequest;
+import com.example.shareEdu.dto.response.PostResponse;
 import com.example.shareEdu.dto.response.PostShareResponse;
+import com.example.shareEdu.dto.response.TopicResponse;
+import com.example.shareEdu.dto.response.UserResponse;
 import com.example.shareEdu.entity.Post;
 import com.example.shareEdu.entity.PostShare;
 import com.example.shareEdu.entity.User;
@@ -25,7 +28,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -56,6 +61,9 @@ public class PostShareServiceTest {
     private Post post;
     private PostShare postShare;
     private PostShareResponse postShareResponse;
+    private PostResponse postResponse;
+    private TopicResponse topicResponse;
+    private UserResponse userResponse;
 
     @BeforeEach
     public void init() {
@@ -81,6 +89,26 @@ public class PostShareServiceTest {
                 .content("Original Post")
                 .build();
 
+        topicResponse = TopicResponse.builder()
+                .id(1L)
+                .name("Machine Learning")
+                .description("A topic about ML")
+                .build();
+
+        userResponse = UserResponse.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .build();
+
+        postResponse = PostResponse.builder()
+                .id(post.getId())
+                .content(post.getContent())
+                .topics(Set.of(topicResponse))
+                .createdAt(LocalDateTime.now().minusDays(1))
+                .author(userResponse)
+                .build();
+
         postShare = PostShare.builder()
                 .id(99L)
                 .content(request.getCaption())
@@ -90,9 +118,13 @@ public class PostShareServiceTest {
                 .build();
 
         postShareResponse = PostShareResponse.builder()
-                .id(99L)
-                .post(post)
+                .id(postShare.getId())
+                .caption(postShare.getContent())
+                .post(postResponse)
+                .author(userResponse)
                 .build();
+
+
     }
 
     @Test
@@ -112,7 +144,7 @@ public class PostShareServiceTest {
     }
 
     @Test
-    public void createPostShare_userNotFound_throwException() {
+    public void createPostShare_userNotExists_throwException() {
         // GIVEN
         when(userRepository.findByUserName("john")).thenReturn(Optional.empty());
 
@@ -127,7 +159,7 @@ public class PostShareServiceTest {
     public void createPostShare_postNotFound_throwException() {
         // GIVEN
         when(userRepository.findByUserName("john")).thenReturn(Optional.of(user));
-        when(postRepository.findById(1L)).thenReturn(Optional.empty());
+        when(postRepository.findById(111L)).thenReturn(Optional.empty());
 
         // WHEN
         AppException exception = assertThrows(AppException.class, () -> postShareService.createPostShare(request));

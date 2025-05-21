@@ -15,7 +15,9 @@ public interface PostShareMapper {
 
     @Mappings({
             @Mapping(source = "post", target = "post"),
-            @Mapping(source = "content", target = "caption")
+            @Mapping(source = "content", target = "caption"),
+            @Mapping(source = "user", target = "author")
+
     })
     public PostShareResponse toPostShareResponse(PostShare postShare);
 }

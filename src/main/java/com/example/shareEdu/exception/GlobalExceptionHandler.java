@@ -43,6 +43,7 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(errorCode.getMessage());
 
+        // 8.2.3, 8.3.3,  return responseEntity.
         return ResponseEntity.status(errorCode.getHttpStatus()).body(apiResponse);
     }
 
