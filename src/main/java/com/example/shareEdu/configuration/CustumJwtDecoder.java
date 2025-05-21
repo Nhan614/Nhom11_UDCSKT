@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.ParseException;
 import java.util.Objects;
-
+// bảo mật
 @Component
 public class CustumJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")

@@ -43,31 +43,46 @@ public class PostService {
     PostMapper postMapper;
 
     public PostResponse createPost(PostCreateRequest postCreateRequest) {
-
+        // 4.4 Lấy SecurityContext để truy xuất tên người dùng hiện tại
         SecurityContext context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        User author  = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        // 4.5 Tìm người dùng theo tên và trả về người dùng hiện tại
+        // Nếu không tìm thấy -> 4.6 Ném ngoại lệ UNAUTHENTICATED nếu không tìm thấy
+        User author = userRepository.findByUserName(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
-
+        // 4.7 Ánh xạ PostCreateRequest thành thực thể Post
         Post post = postMapper.toPost(postCreateRequest);
+        // 4.8 Thiết lập thời gian tạo cho bài viết
         post.setCreatedAt(LocalDateTime.now());
+        // 4.9 Thiết lập tác giả của bài viết
         post.setAuthor(author);
 
-       // log.info("request:..."+ postRepository.toString());
-        log.info("topic from request : "+postCreateRequest.getTopics().toString());
-
+        // 4.10 Lấy tất cả các chủ đề theo ID từ yêu cầu (bao gồm ghi log chủ đề từ yêu cầu)
+        log.info("topic from request : " + postCreateRequest.getTopics().toString());
         var topicsList = topicRepository.findAllById(postCreateRequest.getTopics());
-        if(topicsList.isEmpty() || topicsList.size() < postCreateRequest.getTopics().size()) {
-           throw new AppException(ErrorCode.TOPIC_NOT_EXITS);
-        }
-        log.info("list toppic: "+ topicsList);
 
+        // 4.11 Kiểm tra danh sách chủ đề có trống hoặc không đầy đủ
+        // Nếu không hợp lệ -> 4.12 Ném ngoại lệ TOPIC_NOT_EXITS
+        if (topicsList.isEmpty() || topicsList.size() < postCreateRequest.getTopics().size()) {
+            throw new AppException(ErrorCode.TOPIC_NOT_EXITS);
+        }
+
+        // 4.13 Ghi log danh sách chủ đề đã lấy
+        log.info("list toppic: " + topicsList);
+
+        // 4.14 Tạo tập hợp các chủ đề từ danh sách đã lấy
         Set<Topic> topics = new HashSet<>(topicsList);
 
+        // 4.15 Thiết lập các chủ đề cho bài viết
         post.setTopics(topics);
+        // 4.16 Ghi log tập hợp các chủ đề cuối cùng
         log.info("topic: {}", topics);
 
+        // 4.17 Lưu bài viết vào repository
+        // 4.18 Trả về bài viết đã lưu (hoặc 4.19 ném ngoại lệ nếu thất bại)
+        // 4.18 Chuyển đổi bài viết đã lưu thành PostResponse
         return postMapper.toPostResponse(postRepository.save(post));
     }
     public Post getPost(Long id){
