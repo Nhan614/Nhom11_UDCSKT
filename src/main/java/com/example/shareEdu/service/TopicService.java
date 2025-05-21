@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -52,4 +55,16 @@ public class TopicService {
         // 16.2.5: Chuyển entity sang DTO để trả về
         return topicMapper.toTopicResponse(updated);
     }
+    public List<TopicResponse> getAllTopics() {
+
+        List<Topic> topics = topicRepository.findAll();
+
+        List<TopicResponse> topicResponses = new ArrayList<>();
+
+        topics.forEach(topic -> topicResponses.add(topicMapper.toTopicResponse(topic)));
+        return topicResponses;
+    }
+
+
+
 }
