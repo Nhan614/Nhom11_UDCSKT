@@ -12,11 +12,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/topics")
+@CrossOrigin(origins = "http://localhost:63342")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TopicController {
 
     TopicService topicService;
+
+    // Lấy danh sách chưa duyệt
+    @GetMapping("/pending")
+    public List<TopicResponse> getPendingTopics() {
+        return topicService.getPendingTopics(); // Bạn cần triển khai hàm này
+    }
 
     // Duyệt topic
     @PutMapping("/{id}/approve")

@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -65,4 +69,22 @@ public class TopicService {
         topics.forEach(topic -> topicResponses.add(topicMapper.toTopicResponse(topic)));
         return topicResponses;
     }
+    public List<TopicResponse> getAllTopics() {
+
+        List<Topic> topics = topicRepository.findAll();
+
+        List<TopicResponse> topicResponses = new ArrayList<>();
+
+        topics.forEach(topic -> topicResponses.add(topicMapper.toTopicResponse(topic)));
+        return topicResponses;
+    }
+
+    public List<TopicResponse> getPendingTopics() {
+        List<Topic> pendingTopics = topicRepository.findByApprovedFalseAndIsDeletedFalse();
+        return pendingTopics.stream()
+                .map(topicMapper::toTopicResponse)
+                .collect(Collectors.toList());
+    }
+
+
 }

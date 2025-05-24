@@ -10,4 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
+    List<Topic> findByApprovedFalseAndIsDeletedFalse();
+
 }

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
-
+// Tạo tài khoan admin
 @Slf4j
 @Configuration
 @RequiredArgsConstructor // tự động tạo constructor cho các trường có final
