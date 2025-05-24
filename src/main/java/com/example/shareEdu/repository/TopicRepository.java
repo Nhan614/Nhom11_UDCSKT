@@ -10,6 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
+    // 16.1.1.4 Trả về topic
+    // 16.1.1.9 trả về Topic đã lưu
+
+    //
     List<Topic> findByApprovedFalseAndIsDeletedFalse();
 
 }

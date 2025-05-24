@@ -17,6 +17,9 @@ public enum ErrorCode {
     TOPIC_NOT_EXITS(1009, "Topic not exits", HttpStatus.BAD_REQUEST),
     INVALID_TOKEN(1010, "Invalid token", HttpStatus.UNAUTHORIZED),
     POST_NOT_FOUND(1011,"Post not found" , HttpStatus.NOT_FOUND ),
+    TOPIC_ALREADY_DELETED(1012, "Topic has been deleted and cannot be approved.", HttpStatus.BAD_REQUEST),
+    TOPIC_ALREADY_APPROVED(1013, "Topic has already been approved.", HttpStatus.BAD_REQUEST),
+
     ;
     ErrorCode(int code, String msg, HttpStatus httpStatus) {
         this.code = code;

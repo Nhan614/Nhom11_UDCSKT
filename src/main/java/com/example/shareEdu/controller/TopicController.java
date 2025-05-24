@@ -28,7 +28,9 @@ public class TopicController {
     // Duyệt topic
     @PutMapping("/{id}/approve")
     public ApiResponse<TopicResponse> approveTopic(@PathVariable Long id) {
+        // 16.1.1.2 Gọi TopicService.approveTopic(id)
         TopicResponse response = topicService.approveTopic(id);
+        // 16.1.1.12: Đóng gói response vào ApiResponse và trả về cho UI
         return ApiResponse.<TopicResponse>builder()
                 .result(response)
                 .build();

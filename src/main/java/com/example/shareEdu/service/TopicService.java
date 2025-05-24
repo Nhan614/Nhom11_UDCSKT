@@ -25,35 +25,42 @@ public class TopicService {
 
     // Duyệt topic
     public TopicResponse approveTopic(Long topicId) {
-        // 16.1.1: Nhận topicId từ request và tìm topic theo ID
+        // 16.1.1.3. Gọi findById(topicId) để tìm topic theo ID
         Topic topic = topicRepository.findById(topicId)
-                // 16.1.2: Nếu không tồn tại, ném exception
+                // 16.2.1: Nếu không tồn tại, ném exception TOPIC_NOT_EXITS
                 .orElseThrow(() -> new AppException(ErrorCode.TOPIC_NOT_EXITS));
 
-        // 16.1.3: Đánh dấu topic là đã được duyệt
+        // 16.1.1.5. Kiểm tra topic đã được duyệt trước đó chưa
+        if (topic.isApproved()) {
+            // 16.2.4: Nếu topic đã được duyệt trước đó, ném exception TOPIC_ALREADY_APPROVED
+            throw new AppException(ErrorCode.TOPIC_ALREADY_APPROVED);
+        }
+        // 16.1.1.6. Kiểm tra topic đã được duyệt trước đó chưa
+        if (topic.isDeleted()) {
+            // 16.2.7: Nếu topic đã được xóa trước đó, ném exception TOPIC_ALREADY_DELETED
+            throw new AppException(ErrorCode.TOPIC_ALREADY_DELETED);
+        }
+
+        // 16.1.1.7: Đánh dấu topic là đã được duyệt
         topic.setApproved(true);
 
-        // 16.1.4: Lưu topic đã cập nhật
+        // 16.1.1.8: Lưu topic đã cập nhật
         Topic updated = topicRepository.save(topic);
 
-        // 16.1.5: Chuyển entity sang DTO để trả về
+        // 16.1.10: gọi toTopicResponse(topic)
         return topicMapper.toTopicResponse(updated);
+//        16.1.1.11  trả về Topic đã lưu dưới dạng dto
     }
 
     // Từ chối topic
     public TopicResponse rejectTopic(Long topicId) {
-        // 16.2.1: Nhận topicId từ request và tìm topic theo ID
         Topic topic = topicRepository.findById(topicId)
-                // 16.2.2: Nếu không tồn tại, ném exception
                 .orElseThrow(() -> new AppException(ErrorCode.TOPIC_NOT_EXITS));
 
-        // 16.2.3: Đánh dấu topic là đã bị từ chối (xóa mềm)
         topic.setDeleted(true);
 
-        // 16.2.4: Lưu topic đã cập nhật
         Topic updated = topicRepository.save(topic);
 
-        // 16.2.5: Chuyển entity sang DTO để trả về
         return topicMapper.toTopicResponse(updated);
     }
     public List<TopicResponse> getAllTopics() {

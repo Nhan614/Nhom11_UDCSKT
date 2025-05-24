@@ -11,5 +11,6 @@ public interface TopicMapper {
 
     Topic toTopic(TopicRequest topicRequest);
 
+//    16.1.1.11  trả về Topic đã lưu dưới dạng dto
     TopicResponse toTopicResponse(Topic topic);
 }
