@@ -60,15 +60,7 @@ public class TopicService {
         return topicMapper.toTopicResponse(updated);
     }
 
-    public List<TopicResponse> getAllTopics() {
 
-        List<Topic> topics = topicRepository.findAll();
-
-        List<TopicResponse> topicResponses = new ArrayList<>();
-
-        topics.forEach(topic -> topicResponses.add(topicMapper.toTopicResponse(topic)));
-        return topicResponses;
-    }
     public List<TopicResponse> getAllTopics() {
 
         List<Topic> topics = topicRepository.findAll();
