@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/topics")
 @RequiredArgsConstructor
@@ -33,4 +35,13 @@ public class TopicController {
                 .result(response)
                 .build();
     }
+    @GetMapping
+    public ApiResponse<List<TopicResponse>> getTopics() {
+        return ApiResponse.<List<TopicResponse>>builder()
+                .result(topicService.getAllTopics())
+                .build();
+    }
+
+
+
 }
