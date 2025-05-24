@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    //8.3.6, 8.4.6 @ExceptionHandler(AppException.class)
+    //8.3.6, 8.4.6, 16.2.1, 16.2.5, 16.2.8 @ExceptionHandler(AppException.class)
     //handlingApException(AppException)
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
