@@ -43,8 +43,12 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest userCreationRequest) {
         log.info("service create user");
+        //15.1.1.5: gọi existedByUserName() kiểm tra username có tồn tại hay không
+
         if(userRepository.existsByUserName(userCreationRequest.getUserName()))
+            //15.1.2.1: UserService ném AppException với ErrorCode USER_EXISTED.
             throw new AppException(ErrorCode.USER_EXISTED);
+        //15.1.1.6: UserService tạo User, gọi toUser() để gán vào User.
         User user = userMapper.toUser(userCreationRequest);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -55,11 +59,13 @@ public class UserService {
       //  user.setRoles(roles);
 
         try {
+            //15.1.1.7: UserService gọi save(User) ở UserRepository để lưu User vào Database.
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException exception) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-
+        //15.1.1.8: UserService gọi toUserResponse(User) ở UserMapper để chuyển đổi thành UserResponse.
+        //15.1.1.9: UserService trả UserResponse cho UserController.
         return userMapper.toUserResponse(user);
 
     }
