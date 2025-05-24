@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
+
+//8.3.5, 8.4.5 @ControllerAdvice catche AppException
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -35,16 +37,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
+    //8.3.6, 8.4.6 @ExceptionHandler(AppException.class)
+    //handlingApException(AppException)
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
-        ErrorCode errorCode = exception.getErrorCode();
-        ApiResponse apiResponse = new ApiResponse();
 
+        //8.3.7, 8.4.7 getErrorCode()
+        ErrorCode errorCode = exception.getErrorCode();
+
+        //8.3.8, 8.4.8 new ApiResponse()
+        ApiResponse apiResponse = new ApiResponse();
+        //8.3.9, 8.4.9 setCode(errorCode.getCode());
         apiResponse.setCode(errorCode.getCode());
+        //8.3.10, 8.4.10 setMessage(errorCode.getMessage())
         apiResponse.setMessage(errorCode.getMessage());
 
-        // 8.2.3, 8.3.3,  return responseEntity.
-        return ResponseEntity.status(errorCode.getHttpStatus()).body(apiResponse);
+        //8.3.13, 8.4.13 return ResponseEntity<ApiResponse> with proper HTTP status
+        return ResponseEntity
+                //8.3.11, 8.4.11 status(ErrorCode.HttpStatus())
+                .status(errorCode.getHttpStatus())
+                //8.3.12, 8.4.12 body(apiResponse)
+                .body(apiResponse);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
