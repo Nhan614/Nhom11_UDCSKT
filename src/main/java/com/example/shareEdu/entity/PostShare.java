@@ -1,6 +1,7 @@
 package com.example.shareEdu.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,9 +22,11 @@ public class PostShare {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotNull(message = "user not null")
     @ManyToOne
     User user;
 
+    @NotNull(message = "post not null")
     @ManyToOne
     Post post;
 

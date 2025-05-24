@@ -44,4 +44,11 @@ public class TopicController {
                 .result(response)
                 .build();
     }
+
+    @GetMapping
+    public ApiResponse<List<TopicResponse>> getTopics() {
+        return ApiResponse.<List<TopicResponse>>builder()
+                .result(topicService.getAllTopics())
+                .build();
+    }
 }

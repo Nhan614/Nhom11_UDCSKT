@@ -24,10 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostShareController {
     PostShareService postShareService;
 
+    //8.1.15 Route to @PostMapping createPostShare(createPostShareRequest)
+    // ← Received from 8.1.14: Client sends POST to /share-edu/postShare
+
     @PostMapping
     public ApiResponse<PostShareResponse> createPostShare(@RequestBody PostShareCreateRequest request){
         return ApiResponse.<PostShareResponse>builder()
-                .result(postShareService.createPostShare(request)) //8.1.6. createPostShare(request)
+                //8.1.16. createPostShare(request)
+                .result(postShareService.createPostShare(request))
                 .build();
     }
 

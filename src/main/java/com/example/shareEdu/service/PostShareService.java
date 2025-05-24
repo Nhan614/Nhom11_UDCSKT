@@ -34,20 +34,32 @@ public class PostShareService {
     PostShareRepository postShareRepository;
     PostShareMapper postShareMapper;
 
+
     public PostShareResponse createPostShare(PostShareCreateRequest request) {
 
-        //8.1.7 getUsername form Authentication
+        //8.1.17 getContext().getAuthentication().getName()
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        //8.1.8 call findUserByName(username) of UserRepository to get the currently logged in use
+        //8.1.18 findByUsername(username) of UserRepository to get the currently logged in use
         User user = userRepository.findByUserName(username)
-                .orElseThrow(() ->new AppException(ErrorCode.USER_NOT_EXISTED)); //if not found(8.2.1. return null)  -> 8.2.2. throw USER_NOT_EXISTED exception
+                // 8.3.4 throw AppException if not found(8.3.1 Optional.empty())
+                .orElseThrow(() ->
 
-        //8.1.9 call findUserByName(username) of PostRepository to the post by id
+                        //8.3.3 new AppException(ErrorCode.USER_NOT_EXIST)
+                        new AppException(
+                                //8.3.2 get USER_NOT_EXIST enum
+                        ErrorCode.USER_NOT_EXISTED));
+
+        //8.1.19 call findUserByName(username) of PostRepository to the post by id
         Post post = postRepository.findById(request.getPostId())
-                .orElseThrow(() ->new AppException(ErrorCode.POST_NOT_FOUND)); //if not found -> (8.3.1 return null) ->  8.3.2 throw POST_NOT_FOUND exception
+                // 8.4.4 throw AppException if not found(8.4.1 Optional.empty())
+                .orElseThrow(() ->
+                        //8.4.3 new AppException(ErrorCode.POST_NOT_FOUND)
+                        new AppException(
+                                //8.4.2 get USER_NOT_EXIST enum
+                                ErrorCode.POST_NOT_FOUND));
 
-        //8.1.10. PostShare Service calls PostShare's constructor Post Share(post, user, caption) to create a postShare object.
+        //8.1.20. PostShare Service calls PostShare's constructor Post Share(post, user, caption) to create a postShare object.
         PostShare postShare = PostShare.builder()
                 .shareAt(LocalDateTime.now())
                 .content(request.getCaption())
@@ -55,9 +67,11 @@ public class PostShareService {
                 .user(user)
                 .build();
 
+
         return postShareMapper
-                .toPostShareResponse(postShareRepository //8.1.12.PostShareService calls the toPostShareResponse(postShare) method of the PostShareMapper to convert to postShareResponse.
-                        .save(postShare)); //8.1.11 PostShareService calls the save(postShare) method of PostShareRepository to save the postShare to the database.,
+                //8.1.22.PostShareService calls the toPostShareResponse(postShare) method of the PostShareMapper to convert to postShareResponse.
+                .toPostShareResponse(postShareRepository
+                        .save(postShare)); //8.1.21 PostShareService calls the save(postShare) method of PostShareRepository to save the postShare to the database.,
 
     }
 }
