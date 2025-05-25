@@ -84,7 +84,7 @@ public class UserService {
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
-    @PreAuthorize("hasAnyAuthority('UPDATE_DATA')")
+//    @PreAuthorize("hasAnyAuthority('UPDATE_DATA')")
 
     public List<UserResponse> getUsers(){
         log.info("in method getUsers");
