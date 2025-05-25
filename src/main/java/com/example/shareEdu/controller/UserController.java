@@ -24,7 +24,9 @@ public class UserController {
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         log.info("controller create user");
 
+        //15.1.1.10: UserController gửi ApiResponse cho AdminDashboardUI.
         return ApiResponse.<UserResponse>builder()
+                //15.1.1.3. gọi createUser() ở UserService
                 .result(userService.createUser(request))
                 .build();
     }
