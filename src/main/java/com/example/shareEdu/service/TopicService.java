@@ -30,17 +30,18 @@ public class TopicService {
     public TopicResponse approveTopic(Long topicId) {
         // 16.1.1.3. Gọi findById(topicId) để tìm topic theo ID
         Topic topic = topicRepository.findById(topicId)
-                // 16.2.1: Nếu không tồn tại, ném exception TOPIC_NOT_EXITS
+                // 16.2.0: Nếu không tồn tại
+                // 16.2.1 ném exception TOPIC_NOT_EXITS
                 .orElseThrow(() -> new AppException(ErrorCode.TOPIC_NOT_EXITS));
 
         // 16.1.1.5. Kiểm tra topic đã được duyệt trước đó chưa
         if (topic.isApproved()) {
-            // 16.2.4: Nếu topic đã được duyệt trước đó, ném exception TOPIC_ALREADY_APPROVED
+            // 16.2.5: Nếu topic đã được duyệt trước đó, ném exception TOPIC_ALREADY_APPROVED
             throw new AppException(ErrorCode.TOPIC_ALREADY_APPROVED);
         }
         // 16.1.1.6. Kiểm tra topic đã được duyệt trước đó chưa
         if (topic.isDeleted()) {
-            // 16.2.7: Nếu topic đã được xóa trước đó, ném exception TOPIC_ALREADY_DELETED
+            // 16.2.9: Nếu topic đã được xóa trước đó, ném exception TOPIC_ALREADY_DELETED
             throw new AppException(ErrorCode.TOPIC_ALREADY_DELETED);
         }
 
@@ -52,7 +53,7 @@ public class TopicService {
 
         // 16.1.10: gọi toTopicResponse(topic)
         return topicMapper.toTopicResponse(updated);
-//        16.1.1.11  trả về Topic đã lưu dưới dạng dto
+//        16.1.1.12  trả về Topic đã lưu dưới dạng dto
     }
 
     // Từ chối topic
